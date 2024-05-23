@@ -24,7 +24,6 @@ func main() {
 	helloHandler := handlers.NewHelloHandler() // Вызов функции NewHelloHandler
 
 	// Сопоставьте обработчик с маршрутом "/"
-	// Сопоставьте обработчик с маршрутом "/"
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		helloHandler.Serve(w, r) // Передайте параметры в метод Serve
 	})
