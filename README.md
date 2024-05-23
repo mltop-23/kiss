@@ -1,43 +1,42 @@
-структуры для реализации сайта
+project_root/
+├── cmd/
+│   └── api
+│       ├── main.go      // Entry point for the API server
+│       └── handlers/     // HTTP request handlers
+│           ├── auth.go      // Authentication handler
+│           ├── users.go     // User management handlers
+│           └── dishes.go   // Dish management handlers
+├── config/
+│   └── config.go          // Configuration settings for the application
+├── database/
+│   ├── models.go         // Data structures for entities (User, Dish, etc.)
+│   └── repository.go      // Database interaction and data access logic
+├── main.go                 // Entry point for testing purposes (optional)
+└── README.md              // Project description and instructions
 
-Пользователь
-type User struct {
-	ID        int    `json:"id"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	Email     string `json:"email"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Gender    string `json:"gender"`
-	Role      string `json:"role"` // "husband" or "wife"
-	FamilyID  int    `json:"familyId"`
-}
 
-// Структура для семьи в которой муж выбирает, жена готовит
-type Family struct {
-	ID        int `json:"id"`
-	HusbandID int `json:"husbandId"`
-	WifeID    int `json:"wifeId"`
-	Kisses    int `json:"kisses"`
-	Debt      int `json:"debt"`
-}
+. cmd/api:
 
-// Структура для блюда, хз что там добавить
-type Dish struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Recipe      string `json:"recipe"`
-	CookingTime int    `json:"cookingTime"` // In minutes
-	Complexity  string `json:"complexity"`  // "easy", "medium", "hard"
-	Taste       string `json:"taste"`       // "delicious", "good", "ok"
-	Kisses      int    `json:"kisses"`      // Cost of the dish in kisses
-}
+Contains the main API server code.
+main.go: Initializes the server, sets up routes, and starts the API.
+handlers: Houses HTTP request handlers for specific functionalities.
+auth.go: Handles authentication and authorization requests.
+users.go: Handles user management requests (create, read, update, delete).
+dishes.go: Handles dish management requests (create, read, update, delete).
+2. config:
 
-// Структура для заказа блюда, блюда которые буду тотображаться на сайте
-type Order struct {
-	ID         int    `json:"id"`
-	DishID     int    `json:"dishId"`
-	FamilyID   int    `json:"familyId"`
-	Status     string `json:"status"`     // "pending", "cooking", "done"
-	KissesPaid int    `json:"kissesPaid"` // Number of kisses paid for the dish
-}
+Stores configuration settings for the application.
+config.go: Defines and loads configuration values for database connection, authentication, etc.
+3. database:
+
+Encapsulates database interaction logic.
+models.go: Defines data structures for entities that represent database tables.
+repository.go: Implements data access methods for interacting with the database (CRUD operations).
+4. main.go (optional):
+
+Provides an entry point for testing purposes.
+You can use this file to test your handlers and database interactions separately.
+5. README.md:
+
+Contains project documentation and instructions.
+Provide a brief overview of the project, setup instructions, and usage guidelines.
