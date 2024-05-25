@@ -1,32 +1,27 @@
 package api
 
 import (
-	"fmt"
-	"log"
+	"context"
 	"net/http"
-
-	"kissandeat/cmd/handlers"
-	"kissandeat/config"
-	"kissandeat/internal/repository"
+	"time"
 )
 
-// StartServer starts the API server
-func StartServer(dbConfig *config.Config, repo *repository.Repository) error {
-	// Create router and handlers
-	router := http.NewServeMux()
-	authHandler := handlers.NewAuthHandler(repo)
-	userHandler := handlers.NewUserHandler(repo)
-	dishHandler := handlers.NewDishHandler(repo)
+type Server struct {
+	httpServer *http.Server
+}
 
-	// Define routes and handlers
-	router.HandleFunc("/auth/login", authHandler.Login)
-	router.HandleFunc("/auth/register", authHandler.Register)
-	router.HandleFunc("/users", userHandler.ListUsers)
-	router.HandleFunc("/users/{id}", userHandler.GetUser)
-	router.HandleFunc("/dishes", dishHandler.ListDishes)
-	router.HandleFunc("/dishes/{id}", dishHandler.GetDish)
+func (s *Server) Run(port string, handler http.Handler) error {
+	s.httpServer = &http.Server{
+		Addr:           ":" + port,
+		Handler:        handler,
+		MaxHeaderBytes: 1 << 20, // 1 MB
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+	}
 
-	// Start the HTTP server
-	log.Printf("Starting log API server on port %d", dbConfig.Port)
-	return http.ListenAndServe(fmt.Sprintf(":%d", dbConfig.Port), router)
+	return s.httpServer.ListenAndServe()
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	return s.httpServer.Shutdown(ctx)
 }

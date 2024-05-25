@@ -1,46 +1,70 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"kissandeat/cmd/api"
-	"kissandeat/config"
+	"kissandeat/cmd/handlers"
 	"kissandeat/internal/repository"
-	"log"
+	"kissandeat/internal/service"
+	"os"
+	"os/signal"
+	"syscall"
+
+	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
+func initConfig() error {
+	viper.AddConfigPath("configs")
+	viper.SetConfigName("config")
+	return viper.ReadInConfig()
+}
 func main() {
-	// Load configuration
-	dbConfig, err := config.LoadConfig()
-	if err != nil {
-		log.Fatal(err)
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+
+	if err := initConfig(); err != nil {
+		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
-	// configFile, err := ioutil.ReadFile("config.json")
-	// if err != nil {
-	// 	log.Fatal(err)
+
+	// if err := godotenv.Load(); err != nil {
+	// 	logrus.Fatalf("error loading env variables: %s", err.Error())
 	// }
-
-	// var config config.Config
-	// err = json.Unmarshal(configFile, &config)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// host := "localhost"
-	// port := 3306
-	// user := "my_user"
-	// password := "my_password"
-	// dbName := "my_database"
-
-	// Create a database connection variable
-	var db *sql.DB
-
-	// Create a repository instance (replace with your actual implementation)
-	repo := repository.NewSQLRepository(db) // Assuming SQL
-
-	// Start the API server
-	log.Printf("Starting API server on port %d", dbConfig.Port)
-	err = api.StartServer(dbConfig, &repo)
+	db, err := repository.NewPostgresDB(repository.Config{
+		Host:     viper.GetString("db.host"),
+		Port:     viper.GetString("db.port"),
+		User:     viper.GetString("db.user"),
+		DBName:   viper.GetString("db.dbname"),
+		Password: viper.GetString("db.password"),
+		SSLMode:  viper.GetString("db.sslmode"),
+	})
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatalf("failed to initialize db: %s", err.Error())
+	}
+
+	repos := repository.NewRepository(db)
+	services := service.NewService(repos)
+	handlers := handlers.NewHandler(services)
+	srv := new(api.Server)
+	go func() {
+		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+			logrus.Fatalf("error occured while running http server: %s", err.Error())
+		}
+	}()
+
+	logrus.Print("TodoApp Started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	logrus.Print("TodoApp Shutting Down")
+
+	if err := srv.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("error occured on server shutting down: %s", err.Error())
+	}
+
+	if err := db.Close(); err != nil {
+		logrus.Errorf("error occured on db connection close: %s", err.Error())
 	}
 }

@@ -1,65 +1,41 @@
 package repository
 
 import (
-	"context"
 	"database/sql"
-
-	"kissandeat/internal/structs" // Import your data models
+	"fmt"
+	// Import your data models
 )
 
-type Repository interface {
-	CreateUser(ctx context.Context, user *structs.User) (int64, error)
-	GetUser(ctx context.Context, id int64) (*structs.User, error)
-	UpdateUser(ctx context.Context, user *structs.User) error
-	DeleteUser(ctx context.Context, id int64) error
-
-	// ... Add methods for other entities and operations
+type Repository struct {
+	Postgres
 }
 
-// Concrete repository implementation (e.g., using SQL)
-type sqlRepository struct {
-	db *sql.DB
+type Config struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	DBName   string
+	SSLMode  string
 }
 
-// NewSQLRepository creates a new SQL repository instance
-func NewSQLRepository(db *sql.DB) Repository {
-	return &sqlRepository{db: db}
+func NewPostgresDB(cfg Config) (*sql.DB, error) {
+	db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+		cfg.Host, cfg.Port, cfg.User, cfg.DBName, cfg.Password, cfg.SSLMode))
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
 
-// Stubbed CreateUser method
-func (r *sqlRepository) CreateUser(ctx context.Context, user *structs.User) (int64, error) {
-	// Implement actual create user logic here
-	// For now, this is just a stub
-	return 1, nil // Replace with actual ID generation
-}
-
-// Stubbed GetUser method
-func (r *sqlRepository) GetUser(ctx context.Context, id int64) (*structs.User, error) {
-	// Implement actual get user logic here
-	// For now, this is just a stub
-	return &structs.User{
-		ID:        int(id),
-		Username:  "Stubbed User",
-		Password:  "stubbed_password", // Replace with a secure hash or placeholder
-		Email:     "stubbed@example.com",
-		FirstName: "John",
-		LastName:  "Doe",
-		Gender:    "male",
-		Role:      "husband",
-		FamilyID:  1,
-	}, nil
-}
-
-// Stubbed UpdateUser method
-func (r *sqlRepository) UpdateUser(ctx context.Context, user *structs.User) error {
-	// Implement actual update user logic here
-	// For now, this is just a stub
-	return nil
-}
-
-// Stubbed DeleteUser method
-func (r *sqlRepository) DeleteUser(ctx context.Context, id int64) error {
-	// Implement actual delete user logic here
-	// For now, this is just a stub
-	return nil
+func NewRepository(db *sql.DB) *Repository {
+	return &Repository{
+		Postgres: *NewPostgres(db),
+	}
 }
