@@ -6,20 +6,21 @@ import (
 	"kissandeat/internal/structs"
 )
 
-type Postgres struct {
+type MySQL struct {
 	db *sql.DB
 }
 
-func NewPostgres(db *sql.DB) *Postgres {
-	return &Postgres{db: db}
+func NewMySQL(db *sql.DB) *MySQL {
+	return &MySQL{db: db}
 }
 
-func (r *Postgres) CreateUser(ctx context.Context, user *structs.User) (int64, error) {
+func (m *MySQL) CreateUser(ctx context.Context, user *structs.User) (int64, error) {
 	// Implement actual create user logic here
 	// For now, this is just a stub
 	return 1, nil // Replace with actual ID generation
 }
-func (r *Postgres) GetUser(ctx context.Context, id int64) (*structs.User, error) {
+
+func (m *MySQL) GetUser(ctx context.Context, id int64) (*structs.User, error) {
 	// Implement actual get user logic here
 	// For now, this is just a stub
 	return &structs.User{
@@ -34,12 +35,14 @@ func (r *Postgres) GetUser(ctx context.Context, id int64) (*structs.User, error)
 		FamilyID:  1,
 	}, nil
 }
-func (r *Postgres) UpdateUser(ctx context.Context, user *structs.User) error {
+
+func (m *MySQL) UpdateUser(ctx context.Context, user *structs.User) error {
 	// Implement actual update user logic here
 	// For now, this is just a stub
 	return nil
 }
-func (r *Postgres) DeleteUser(ctx context.Context, id int64) error {
+
+func (m *MySQL) DeleteUser(ctx context.Context, id int64) error {
 	// Implement actual delete user logic here
 	// For now, this is just a stub
 	return nil

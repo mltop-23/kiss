@@ -30,7 +30,8 @@ func main() {
 	// if err := godotenv.Load(); err != nil {
 	// 	logrus.Fatalf("error loading env variables: %s", err.Error())
 	// }
-	db, err := repository.NewPostgresDB(repository.Config{
+	db, driver, err := repository.NewDB(repository.Config{
+		Driver:   viper.GetString("db.driver"),
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
 		User:     viper.GetString("db.user"),
@@ -42,7 +43,7 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
-	repos := repository.NewRepository(db)
+	repos, _ := repository.NewRepository(db, driver)
 	services := service.NewService(repos)
 	handlers := handlers.NewHandler(services)
 	srv := new(api.Server)
@@ -52,13 +53,13 @@ func main() {
 		}
 	}()
 
-	logrus.Print("TodoApp Started")
+	logrus.Print("kissandpizz Started")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	logrus.Print("TodoApp Shutting Down")
+	logrus.Print("kissandpizz Shutting Down")
 
 	if err := srv.Shutdown(context.Background()); err != nil {
 		logrus.Errorf("error occured on server shutting down: %s", err.Error())

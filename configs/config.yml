@@ -1,6 +1,7 @@
 port: "8080"
 
 db:
+    driver: "postgres"
     user: "my_user"
     host: "localhost"
     port: "5432"
