@@ -5,7 +5,10 @@ import (
 	"kissandeat/cmd/api"
 	"kissandeat/cmd/handlers"
 	"kissandeat/internal/repository"
+	"kissandeat/internal/repository/dbrepo"
 	"kissandeat/internal/service"
+
+	// "kissandeat/internal/service/dbrepo"
 	"os"
 	"os/signal"
 	"syscall"
@@ -30,7 +33,7 @@ func main() {
 	// if err := godotenv.Load(); err != nil {
 	// 	logrus.Fatalf("error loading env variables: %s", err.Error())
 	// }
-	db, driver, err := repository.NewDB(repository.Config{
+	db, _, err := dbrepo.NewDB(dbrepo.Config{
 		Driver:   viper.GetString("db.driver"),
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
@@ -43,7 +46,7 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
-	repos, _ := repository.NewRepository(db, driver)
+	repos, err := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handlers.NewHandler(services)
 	srv := new(api.Server)

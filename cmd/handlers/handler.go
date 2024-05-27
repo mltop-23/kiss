@@ -38,11 +38,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		users.GET("/:id", h.GetUser) // Stub for getting a user
 	}
 
-	dishes := router.Group("/dishes")
-	{
-		dishes.GET("", h.ListDishes)  // Stub for listing dishes
-		dishes.GET("/:id", h.GetDish) // Stub for getting a dish
-	}
+	// dishes := router.Group("/dishes")
+	// {
+	// 	dishes.GET("", h.ListDishes)  // Stub for listing dishes
+	// 	dishes.GET("/:id", h.GetDish) // Stub for getting a dish
+	// }
 
 	return router
 }
