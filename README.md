@@ -1,19 +1,36 @@
-project_root/
-├── cmd/
-│   └── api
-│       ├── main.go      // Entry point for the API server
-│       └── handlers/     // HTTP request handlers
-│           ├── auth.go      // Authentication handler
-│           ├── users.go     // User management handlers
-│           └── dishes.go   // Dish management handlers
-├── config/
-│   └── config.go          // Configuration settings for the application
-├── database/
-│   ├── models.go         // Data structures for entities (User, Dish, etc.)
-│   └── repository.go      // Database interaction and data access logic
-├── main.go                 // Entry point for testing purposes (optional)
-└── README.md              // Project description and instructions
-
+.
+├── cmd
+│   ├── api
+│   │   └── main.go
+│   └── handlers
+│       ├── apihandlers.go
+│       ├── handler.go
+│       └── response.go
+├── config.json
+├── configs
+│   ├── config.go
+│   └── config.yml
+├── go.mod
+├── go.sum
+├── internal
+│   ├── repository
+│   │   ├── authrepo
+│   │   │   └── repository.go
+│   │   ├── dbrepo
+│   │   │   ├── mysql.go
+│   │   │   ├── postgres.go
+│   │   │   └── repository.go
+│   │   └── reposotory.go
+│   ├── service
+│   │   ├── dbservice
+│   │   │   ├── db.go
+│   │   │   ├── interfaces.go
+│   │   │   ├── service.go
+│   │   │   └── storage.go
+│   │   └── service.go
+│   └── structs
+│       └── structs.go
+└── main.go
 
 . cmd/api:
 
