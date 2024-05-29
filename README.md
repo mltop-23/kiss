@@ -22,7 +22,23 @@
 │   │   │   └── repository.go
 │   │   └── reposotory.go
 │   ├── service
-│   │   ├── dbservice
+│   │   ├── dbseproject_root/
+├── cmd/
+│   └── api
+│       ├── main.go      // Entry point for the API server
+│       └── handlers/     // HTTP request handlers
+│           ├── auth.go      // Authentication handler
+│           ├── users.go     // User management handlers
+│           └── dishes.go   // Dish management handlers
+├── config/
+│   └── config.go          // Configuration settings for the application
+├── database/
+│   ├── models.go         // Data structures for entities (User, Dish, etc.)
+│   └── repository.go      // Database interaction and data access logic
+├── main.go                 // Entry point for testing purposes (optional)
+└── README.md              // Project description and instructions
+
+rvice
 │   │   │   ├── db.go
 │   │   │   ├── interfaces.go
 │   │   │   ├── service.go
