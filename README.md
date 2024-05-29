@@ -1,5 +1,5 @@
 ![Alt text](/foto/structure.png?raw=true "Optional Title")
-![Alt text](/foto/BD.png.jpg?raw=true "Optional Title")
+![Alt text](/foto/BD.png?raw=true "Optional Title")
 
 
 
