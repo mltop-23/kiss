@@ -1,0 +1,6 @@
+создать миграции
+
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+дока -help  https://github.com/golang-migrate/migrate/blob/master/cmd/migrate/README.md
+

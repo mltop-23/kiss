@@ -19,30 +19,39 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
+	// Swagger
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	hello := router.Group("/hello")
+	// router.GET("/", h.Index)
+
+	api := router.Group("/api/v1")
+
+	// Auth endpoints
+	auth := api.Group("/auth")
 	{
-		hello.GET("", h.Hello) // Stub for hello endpoint
+		auth.POST("/login", h.Login)       // Login endpoint
+		auth.POST("/register", h.Register) // Register endpoint
 	}
 
-	auth := router.Group("/auth")
+	// User endpoints
+	users := api.Group("/users")
 	{
-		auth.POST("/login", h.Login)       // Stub for login endpoint
-		auth.POST("/register", h.Register) // Stub for register endpoint
+		users.GET("", h.ListUsers)   // List users
+		users.GET("/:id", h.GetUser) // Get user by ID
 	}
 
-	users := router.Group("/users")
+	// Dish endpoints
+	dishes := api.Group("/dishes")
 	{
-		users.GET("", h.ListUsers)   // Stub for listing users
-		users.GET("/:id", h.GetUser) // Stub for getting a user
+		dishes.GET("", h.ListDishes)  // List dishes
+		dishes.GET("/:id", h.GetDish) // Get dish by ID
+		// dishes.PUT("/:id", h.UpdateDish)   // Update dish by ID
+		// dishes.DELETE("/:id", h.DeleteDish) // Delete dish by ID
 	}
 
-	// dishes := router.Group("/dishes")
-	// {
-	// 	dishes.GET("", h.ListDishes)  // Stub for listing dishes
-	// 	dishes.GET("/:id", h.GetDish) // Stub for getting a dish
-	// }
+	// Apply middleware for authentication to endpoints that require it
+	// users.Use(h.AuthMiddleware())
+	// dishes.Use(h.AuthMiddleware())
 
 	return router
 }
