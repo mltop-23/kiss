@@ -1,5 +1,7 @@
 package structs
 
+import "github.com/dgrijalva/jwt-go"
+
 // Структура для заказа блюда
 type Order struct {
 	ID         int    `json:"id"`         // Уникальный идентификатор заказа
@@ -72,4 +74,9 @@ type MealDish struct {
 	ID         int `json:"id"`         // Уникальный идентификатор
 	MealPlanID int `json:"mealPlanId"` // Идентификатор плана приема пищи
 	DishID     int `json:"dishId"`     // Идентификатор блюда
+}
+
+type Claims struct {
+	UserID int `json:"user_id"`
+	jwt.StandardClaims
 }

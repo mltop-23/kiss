@@ -1,0 +1,13 @@
+создать миграции
+
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+дока -help  https://github.com/golang-migrate/migrate/blob/master/cmd/migrate/README.md
+
+
+
+docker run -d --name postgres-db -e POSTGRES_PASSWORD=my_password -e POSTGRES_USER=my_user -e POSTGRES_DB=my_database -p 5432:5432  postgres:latest
+
+docker exec -it postgres_db psql -U my_user -d my_database 
+
+\dt
