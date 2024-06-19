@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"kissandeat/internal/structs"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,12 +13,48 @@ func (h *Handler) Hello(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Hello, world!"})
 }
 
-func (h *Handler) Login(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "Login stub"})
-}
+// func (h *Handler) Login(c *gin.Context) {
+// 	c.JSON(http.StatusOK, gin.H{"message": "Login stub"})
+// }
+
+// func (h *Handler) Register(c *gin.Context) {
+// 	c.JSON(http.StatusOK, gin.H{"message": "Register stub"})
+// }
 
 func (h *Handler) Register(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "Register stub"})
+	var input structs.User
+
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.services.AuthInterface.CreateMember(c.Request.Context(), &input); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "registration successful"})
+}
+
+func (h *Handler) Login(c *gin.Context) {
+	var input struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := h.services.AuthInterface.LoginMember(c.Request.Context(), input.Email, input.Password)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 func (h *Handler) ListUsers(c *gin.Context) {

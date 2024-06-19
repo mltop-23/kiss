@@ -2,10 +2,11 @@ package handlers
 
 import (
 	"kissandeat/internal/service"
+	"kissandeat/middleware"
 
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	// swaggerFiles "github.com/swaggo/files"
+	// ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Handler struct {
@@ -20,22 +21,22 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	// Swagger
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// router.Use(middleware.JWTMiddleware("your-secret-key"))
 
 	// router.GET("/", h.Index)
 
-	api := router.Group("/api/v1")
-
 	// Auth endpoints
-	auth := api.Group("/auth")
+	auth := router.Group("/auth")
 	{
 		auth.POST("/login", h.Login)       // Login endpoint
 		auth.POST("/register", h.Register) // Register endpoint
 	}
-
+	api := router.Group("/api")
 	// User endpoints
 	users := api.Group("/users")
 	{
+		users.Use(middleware.JWTMiddleware("your-secret-key"))
 		users.GET("", h.ListUsers)   // List users
 		users.GET("/:id", h.GetUser) // Get user by ID
 	}
@@ -43,6 +44,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	// Dish endpoints
 	dishes := api.Group("/dishes")
 	{
+		dishes.Use(middleware.JWTMiddleware("your-secret-key"))
 		dishes.GET("", h.ListDishes)  // List dishes
 		dishes.GET("/:id", h.GetDish) // Get dish by ID
 		// dishes.PUT("/:id", h.UpdateDish)   // Update dish by ID
