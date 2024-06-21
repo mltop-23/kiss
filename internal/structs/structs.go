@@ -14,8 +14,8 @@ type Order struct {
 //____________________________________________________________________________________________________________________
 
 type User struct {
-	ID        int    `json:"id"`
-	FamilyID  int    `json:"familyId"`
+	ID int `json:"id"`
+	// FamilyID  int    `json:"family_id"`
 	Username  string `json:"username"`
 	Password  string `json:"password"`
 	Email     string `json:"email"`
@@ -51,23 +51,23 @@ type Meal struct {
 	Name string `json:"name"` // Название приема пищи ("breakfast", "lunch", "dinner")
 }
 
-// Структура для ПЛАНОВ приема пищи женщины
-type MealPlanWoman struct {
-	ID          int    `json:"id"`          // Уникальный идентификатор плана
-	FamilyID    int    `json:"familyId"`    // Идентификатор семьи
-	WhosePlanID int    `json:"whosePlanId"` // Идентификатор человека, назначившего план (жены)
-	MealID      int    `json:"mealId"`      // Идентификатор типа приема пищи
-	Date        string `json:"date"`        // Дата приема пищи
-}
+// // Структура для ПЛАНОВ приема пищи женщины
+// type MealPlanWoman struct {
+// 	ID          int    `json:"id"`          // Уникальный идентификатор плана
+// 	FamilyID    int    `json:"familyId"`    // Идентификатор семьи
+// 	WhosePlanID int    `json:"whosePlanId"` // Идентификатор человека, назначившего план (жены)
+// 	MealID      int    `json:"mealId"`      // Идентификатор типа приема пищи
+// 	Date        string `json:"date"`        // Дата приема пищи
+// }
 
-// Структура для ПЛАНОВ приема пищи мужчины
-type MealPlanMan struct {
-	ID          int    `json:"id"`          // Уникальный идентификатор плана
-	FamilyID    int    `json:"familyId"`    // Идентификатор семьи
-	WhosePlanID int    `json:"whosePlanId"` // Идентификатор человека, назначившего план (мужа)
-	MealID      int    `json:"mealId"`      // Идентификатор типа приема пищи
-	Date        string `json:"date"`        // Дата приема пищи
-}
+// // Структура для ПЛАНОВ приема пищи мужчины
+// type MealPlanMan struct {
+// 	ID          int    `json:"id"`          // Уникальный идентификатор плана
+// 	FamilyID    int    `json:"familyId"`    // Идентификатор семьи
+// 	WhosePlanID int    `json:"whosePlanId"` // Идентификатор человека, назначившего план (мужа)
+// 	MealID      int    `json:"mealId"`      // Идентификатор типа приема пищи
+// 	Date        string `json:"date"`        // Дата приема пищи
+// }
 
 // Структура для блюд в плане приема пищи
 type MealDish struct {

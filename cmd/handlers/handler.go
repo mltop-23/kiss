@@ -45,9 +45,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	dishes := api.Group("/dishes")
 	{
 		dishes.Use(middleware.JWTMiddleware("your-secret-key"))
-		dishes.GET("", h.ListDishes)  // List dishes
-		dishes.GET("/:id", h.GetDish) // Get dish by ID
-		// dishes.PUT("/:id", h.UpdateDish)   // Update dish by ID
+		dishes.GET("", h.ListDishes)   // List dishes
+		dishes.GET("/:id", h.GetDish)  // Get dish by ID
+		dishes.POST("/:id", h.AddDish) // add dish by ID
 		// dishes.DELETE("/:id", h.DeleteDish) // Delete dish by ID
 	}
 

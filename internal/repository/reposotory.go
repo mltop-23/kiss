@@ -6,17 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"kissandeat/internal/repository/dbrepo"
+	Dishrepo "kissandeat/internal/repository/dishRepo"
 	FamilyAuthRepo "kissandeat/internal/repository/familyAuthRepo"
 	"kissandeat/internal/structs"
 	"strings"
 )
 
-type SqlRepository interface {
-	// CreateUser(ctx context.Context, user *structs.User) (int64, error)
-	GetUser(id int64) (*structs.User, error)
-	// UpdateUser(ctx context.Context, user *structs.User) error
-	// DeleteUser(ctx context.Context, id int64) error
-}
+// type SqlRepository interface {
+// 	// CreateUser(ctx context.Context, user *structs.User) (int64, error)
+// 	// GetUser(id int64) (*structs.User, error)
+// 	// UpdateUser(ctx context.Context, user *structs.User) error
+// 	// DeleteUser(ctx context.Context, id int64) error
+// }
 
 type FamilyAuthRepository interface {
 	// Family management
@@ -43,11 +44,12 @@ type DishRepository interface {
 	UpdateDish(ctx context.Context, dish *structs.Dish) error
 	DeleteDish(ctx context.Context, dishID int) error
 	GetDish(ctx context.Context, dishID int) (*structs.Dish, error)
-	linkDishToFamily(ctx context.Context, dishId int, familyId int) error
+	GetDishes(ctx context.Context) ([]*structs.Dish, error)
+	// linkDishToFamily(ctx context.Context, dishId int, familyId int) error //пока не надо
 }
 
 type Repository struct {
-	Dbb        SqlRepository
+	DishRepo   DishRepository
 	AuthFamily FamilyAuthRepository
 }
 
@@ -66,17 +68,9 @@ func GetDriverName(db *sql.DB, driverName string) (string, error) {
 }
 
 func NewRepository(db *sql.DB) (*Repository, error) {
-	//var sqlRepo SqlRepository
-	// switch driverName {
-	// case "postgres":
-	// 	sqlRepo = &dbrepo.Postgres{Db: db}
-	// // case "mysql":
-	// // 	sqlRepo = &dbrepo.MySQL{Db: db}
-	// default:
-	// 	return nil, errors.New("unsupported database driver")
-	// }
+
 	return &Repository{
-		Dbb:        dbrepo.NewPostgres(db),
+		DishRepo:   Dishrepo.NewDishRepo(dbrepo.NewDBRepo(db)),
 		AuthFamily: FamilyAuthRepo.NewFamilyAuthPostgres(db),
 	}, errors.New("unsupported database driver")
 }

@@ -3,17 +3,10 @@ package service
 import (
 	"context"
 	"kissandeat/internal/repository"
-	"kissandeat/internal/service/dbservice"
+	dishService "kissandeat/internal/service/DishService"
 	authFamilyService "kissandeat/internal/service/familyAuthService"
 	"kissandeat/internal/structs"
 )
-
-type DbInterface interface {
-	// CreateUser(ctx context.Context, user *structs.User) (int64, error)
-	GetUser(id int64) (*structs.User, error)
-	// UpdateUser(ctx context.Context, user *structs.User) error
-	// DeleteUser(ctx context.Context, id int64) error
-}
 
 type AuthInterface interface {
 	// AuthUser(ctx context.Context, id int64) (*structs.User, error)
@@ -33,28 +26,23 @@ type AuthInterface interface {
 	ValidateToken(ctx context.Context, token string) (*structs.User, error)
 	LogoutMember(ctx context.Context, token string) error
 }
+type DishInterface interface {
+	// Dish management
+	AddDish(ctx context.Context, dish *structs.Dish) error
+	UpdateDish(ctx context.Context, dish *structs.Dish) error
+	DeleteDish(ctx context.Context, dishID int) error
+	GetDish(ctx context.Context, dishID int) (*structs.Dish, error)
+	GetDishes(ctx context.Context) ([]*structs.Dish, error)
+}
 
 type Service struct {
-	DbInterface
+	DishInterface
 	AuthInterface
 }
 
-// //	type Core struct {
-// //		userRepo     UserRepo
-// //		sessionRepo  SessionRepo
-// //		hashing      Hasher
-// //		auth         Auth
-// //		}
-// // type Postgres interface {
-// // 	CreateUser(ctx context.Context, user *structs.User) (int64, error)
-// // 	GetUser(ctx context.Context, id int64) (*structs.User, error)
-// // 	UpdateUser(ctx context.Context, user *structs.User) error
-// // 	DeleteUser(ctx context.Context, id int64) error
-// // }
-
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		DbInterface:   dbservice.NewDbService(repos.Dbb),
+		DishInterface: dishService.NewDishService(repos.DishRepo), //
 		AuthInterface: authFamilyService.NewAuthService(repos.AuthFamily),
 		// Assign the repository instance
 	}

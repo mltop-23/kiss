@@ -1,46 +1,50 @@
 package dbrepo
 
 import (
+	"context"
 	"database/sql"
-	"kissandeat/internal/structs"
 )
 
-type Postgres struct {
-	Db *sql.DB
+type DBRepo struct {
+	db *sql.DB
 }
 
-func NewPostgres(db *sql.DB) *Postgres {
-	return &Postgres{Db: db}
+func NewDBRepo(db *sql.DB) *DBRepo {
+	return &DBRepo{db: db}
 }
 
-//	func (r *Postgres) CreateUser(ctx context.Context, user *structs.User) (int64, error) {
-//		// Implement actual create user logic here
-//		// For now, this is just a stub
-//		return 1, nil // Replace with actual ID generation
-//	}
-func (r *Postgres) GetUser(id int64) (*structs.User, error) {
-	// Implement actual get user logic here
-	// For now, this is just a stub
-	return &structs.User{
-		ID:        5,
-		Username:  "Stubbed User",
-		Password:  "stubbed_password", // Replace with a secure hash or placeholder
-		Email:     "stubbed@example.com",
-		FirstName: "John",
-		LastName:  "Doe",
-		Gender:    "male",
-		Role:      "husband",
-		FamilyID:  1,
-	}, nil
-}
-
-// func (r *Postgres) UpdateUser(ctx context.Context, user *structs.User) error {
-// 	// Implement actual update user logic here
-// 	// For now, this is just a stub
-// 	return nil
+// func NewDBRepo(connString string) (*DBRepo, error) {
+// 	db, err := sql.Open("postgres", connString)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	// Проверка подключения к базе данных
+// 	if err = db.Ping(); err != nil {
+// 		return nil, err
+// 	}
+// 	return &DBRepo{db: db}, nil
 // }
-// func (r *Postgres) DeleteUser(ctx context.Context, id int64) error {
-// 	// Implement actual delete user logic here
-// 	// For now, this is just a stub
-// 	return nil
+
+func (repo *DBRepo) Close() error {
+	return repo.db.Close()
+}
+
+func (repo *DBRepo) Select(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+	return repo.db.QueryContext(ctx, query, args...)
+}
+
+func (repo *DBRepo) Exec(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+	return repo.db.ExecContext(ctx, query, args...)
+}
+
+// func (repo *DBRepo) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+// 	return repo.db.ExecContext(ctx, query, args...)
 // }
+
+func (repo *DBRepo) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+	return repo.db.QueryContext(ctx, query, args...)
+}
+
+func (repo *DBRepo) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
+	return repo.db.QueryRowContext(ctx, query, args...)
+}

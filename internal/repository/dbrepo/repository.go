@@ -3,15 +3,14 @@ package dbrepo
 import (
 	"database/sql"
 	"fmt"
-	"kissandeat/internal/structs"
 )
 
-type SqlRepository interface {
-	// CreateUser(ctx context.Context, user *structs.User) (int64, error)
-	GetUser(id int64) (*structs.User, error)
-	// UpdateUser(ctx context.Context, user *structs.User) error
-	// DeleteUser(ctx context.Context, id int64) error
-}
+// type SqlRepository interface {
+// 	// CreateUser(ctx context.Context, user *structs.User) (int64, error)
+// 	// GetUser(id int64) (*structs.User, error) //вот это сломало
+// 	// UpdateUser(ctx context.Context, user *structs.User) error
+// 	// DeleteUser(ctx context.Context, id int64) error
+// }
 
 type Config struct {
 	Driver   string
@@ -36,70 +35,52 @@ func NewDB(cfg Config) (*sql.DB, string, error) {
 	}
 
 	createTablesQuery := `
-	CREATE TABLE IF NOT EXISTS users (
-	    id SERIAL PRIMARY KEY,
-	    family_id INT,
-	    username VARCHAR(50) NOT NULL UNIQUE,
-	    password VARCHAR(255) NOT NULL,
-	    email VARCHAR(100) NOT NULL UNIQUE,
-	    first_name VARCHAR(50),
-	    last_name VARCHAR(50),
-	    gender VARCHAR(10),
-	    role VARCHAR(10)
-	);
+	CREATE TABLE IF NOT EXISTS Users (
+    ID SERIAL PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Gender VARCHAR(50) NOT NULL,
+    Role VARCHAR(50) NOT NULL
+);
 
-	CREATE TABLE IF NOT EXISTS families (
-	    id SERIAL PRIMARY KEY,
-	    husband_id INT,
-	    wife_id INT,
-	    kisses INT,
-	    debt INT
-	);
+CREATE TABLE IF NOT EXISTS Families (
+    ID SERIAL PRIMARY KEY,
+    HusbandID INT NOT NULL,
+    WifeID INT NOT NULL,
+    Kisses INT NOT NULL,
+    Debt INT NOT NULL,
+    CONSTRAINT fk_husband FOREIGN KEY (HusbandID) REFERENCES Users(ID),
+    CONSTRAINT fk_wife FOREIGN KEY (WifeID) REFERENCES Users(ID)
+);
 
-	CREATE TABLE IF NOT EXISTS dishes (
-	    id SERIAL PRIMARY KEY,
-	    name VARCHAR(100),
-	    recipe TEXT,
-	    cooking_time INT,
-	    complexity VARCHAR(10),
-	    taste VARCHAR(10),
-	    kisses INT
-	);
+CREATE TABLE IF NOT EXISTS Dishes (
+    ID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Recipe TEXT NOT NULL,
+    CookingTime INT NOT NULL,
+    Complexity VARCHAR(50) NOT NULL,
+    Taste VARCHAR(50) NOT NULL,
+    Kisses INT NOT NULL
+);
 
-	CREATE TABLE IF NOT EXISTS meals (
-	    id SERIAL PRIMARY KEY,
-	    name VARCHAR(50)
-	);
+CREATE TABLE IF NOT EXISTS Meals (
+    ID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
 
-	CREATE TABLE IF NOT EXISTS meal_plans_woman (
-	    id SERIAL PRIMARY KEY,
-	    family_id INT,
-	    whose_plan_id INT,
-	    meal_id INT,
-	    date DATE
-	);
+CREATE TABLE IF NOT EXISTS Orders (
+    ID SERIAL PRIMARY KEY,
+    DishID INT NOT NULL,
+    FamilyID INT NOT NULL,
+    Status VARCHAR(50) NOT NULL,
+    KissesPaid INT NOT NULL,
+    CONSTRAINT fk_dish FOREIGN KEY (DishID) REFERENCES Dishes(ID),
+    CONSTRAINT fk_family_order FOREIGN KEY (FamilyID) REFERENCES Families(ID)
+);
 
-	CREATE TABLE IF NOT EXISTS meal_plans_man (
-	    id SERIAL PRIMARY KEY,
-	    family_id INT,
-	    whose_plan_id INT,
-	    meal_id INT,
-	    date DATE
-	);
-
-	CREATE TABLE IF NOT EXISTS meal_dishes (
-	    id SERIAL PRIMARY KEY,
-	    meal_plan_id INT,
-	    dish_id INT
-	);
-
-	CREATE TABLE IF NOT EXISTS orders (
-	    id SERIAL PRIMARY KEY,
-	    dish_id INT,
-	    family_id INT,
-	    status VARCHAR(10),
-	    kisses_paid INT
-	);
 	`
 	_, err = db.Exec(createTablesQuery)
 	if err != nil {

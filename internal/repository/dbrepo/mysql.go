@@ -32,7 +32,6 @@ func (m *MySQL) GetUser(ctx context.Context, id int64) (*structs.User, error) {
 		LastName:  "Doe",
 		Gender:    "male",
 		Role:      "husband",
-		FamilyID:  1,
 	}, nil
 }
 

@@ -62,8 +62,8 @@ func (r *FamilyAuthPostgres) GetFamily(ctx context.Context, familyID int) (*stru
 
 // Member management
 func (r *FamilyAuthPostgres) CreateMember(ctx context.Context, member *structs.User) error {
-	_, err := r.db.ExecContext(ctx, "INSERT INTO users (family_id, username, password, email, first_name, last_name, gender, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-		member.FamilyID, member.Username, member.Password, member.Email, member.FirstName, member.LastName, member.Gender, member.Role)
+	_, err := r.db.ExecContext(ctx, "INSERT INTO users ( username, password, email, firstName, lastName, gender, role) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		member.Username, member.Password, member.Email, member.FirstName, member.LastName, member.Gender, member.Role)
 	return err
 }
 
@@ -80,8 +80,8 @@ func (r *FamilyAuthPostgres) DeleteMember(ctx context.Context, memberID int) err
 
 func (r *FamilyAuthPostgres) GetMember(ctx context.Context, memberID int) (*structs.User, error) {
 	var member structs.User
-	err := r.db.QueryRowContext(ctx, "SELECT id, family_id, username, password, email, first_name, last_name, gender, role FROM users WHERE id = $1", memberID).Scan(
-		&member.ID, &member.FamilyID, &member.Username, &member.Password, &member.Email, &member.FirstName, &member.LastName, &member.Gender, &member.Role)
+	err := r.db.QueryRowContext(ctx, "SELECT id, username, password, email, first_name, last_name, gender, role FROM users WHERE id = $1", memberID).Scan(
+		&member.ID, &member.Username, &member.Password, &member.Email, &member.FirstName, &member.LastName, &member.Gender, &member.Role)
 	return &member, err
 }
 
@@ -113,8 +113,8 @@ func (r *FamilyAuthPostgres) ValidateToken(ctx context.Context, token string) (*
 	}
 
 	var user structs.User
-	err = r.db.QueryRowContext(ctx, "SELECT id, family_id, username, email, first_name, last_name, gender, role FROM users WHERE id = $1", claims.UserID).Scan(
-		&user.ID, &user.FamilyID, &user.Username, &user.Email, &user.FirstName, &user.LastName, &user.Gender, &user.Role)
+	err = r.db.QueryRowContext(ctx, "SELECT id, username, email, first_name, last_name, gender, role FROM users WHERE id = $1", claims.UserID).Scan(
+		&user.ID, &user.Username, &user.Email, &user.FirstName, &user.LastName, &user.Gender, &user.Role)
 	if err != nil {
 		return nil, err
 	}
