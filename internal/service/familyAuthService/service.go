@@ -32,6 +32,12 @@ func (s *AuthService) DeleteFamily(ctx context.Context, familyID int) error {
 func (s *AuthService) GetFamily(ctx context.Context, familyID int) (*structs.Family, error) {
 	return s.repo.GetFamily(ctx, familyID)
 }
+func (s *AuthService) ListFamilies(ctx context.Context) ([]*structs.Family, error) {
+	return s.repo.ListFamilies(ctx)
+}
+func (s *AuthService) ListMembers(ctx context.Context) ([]*structs.User, error) {
+	return s.repo.ListMembers(ctx)
+}
 
 // Member management
 func (s *AuthService) CreateMember(ctx context.Context, member *structs.User) error {

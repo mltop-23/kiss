@@ -98,3 +98,9 @@ func (repo *DishRepo) GetDishes(ctx context.Context) ([]*structs.Dish, error) {
 	}
 	return dishes, nil
 }
+
+func (repo *DishRepo) AddMealWithFamily(ctx context.Context, familyID, dishID int) error {
+	query := `INSERT INTO mealsWithFamily (FamilyID, DishID) VALUES ($1, $2)`
+	_, err := repo.db.Exec(ctx, query, familyID, dishID)
+	return err
+}

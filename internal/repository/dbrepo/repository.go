@@ -35,7 +35,13 @@ func NewDB(cfg Config) (*sql.DB, string, error) {
 	}
 
 	createTablesQuery := `
-	CREATE TABLE IF NOT EXISTS Users (
+		DROP TABLE IF EXISTS mealsWithFamily;
+		DROP TABLE IF EXISTS Orders;
+		DROP TABLE IF EXISTS Families;
+		DROP TABLE IF EXISTS Dishes;
+		DROP TABLE IF EXISTS Users;
+
+	CREATE TABLE Users (
     ID SERIAL PRIMARY KEY,
     Username VARCHAR(255) NOT NULL,
     Password VARCHAR(255) NOT NULL,
@@ -46,7 +52,7 @@ func NewDB(cfg Config) (*sql.DB, string, error) {
     Role VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Families (
+CREATE TABLE Families (
     ID SERIAL PRIMARY KEY,
     HusbandID INT NOT NULL,
     WifeID INT NOT NULL,
@@ -56,7 +62,7 @@ CREATE TABLE IF NOT EXISTS Families (
     CONSTRAINT fk_wife FOREIGN KEY (WifeID) REFERENCES Users(ID)
 );
 
-CREATE TABLE IF NOT EXISTS Dishes (
+CREATE TABLE Dishes (
     ID SERIAL PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
     Recipe TEXT NOT NULL,
@@ -66,12 +72,21 @@ CREATE TABLE IF NOT EXISTS Dishes (
     Kisses INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Meals (
-    ID SERIAL PRIMARY KEY,
-    Name VARCHAR(255) NOT NULL
+CREATE TABLE mealsWithFamily (
+    FamilyID INT NOT NULL,
+    DishID INT NOT NULL,
+    PRIMARY KEY (FamilyID, DishID),
+    CONSTRAINT fk_family
+        FOREIGN KEY (FamilyID) 
+        REFERENCES Families(ID)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_dish
+        FOREIGN KEY (DishID) 
+        REFERENCES Dishes(ID)
+        ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Orders (
+CREATE TABLE Orders (
     ID SERIAL PRIMARY KEY,
     DishID INT NOT NULL,
     FamilyID INT NOT NULL,
@@ -80,6 +95,9 @@ CREATE TABLE IF NOT EXISTS Orders (
     CONSTRAINT fk_dish FOREIGN KEY (DishID) REFERENCES Dishes(ID),
     CONSTRAINT fk_family_order FOREIGN KEY (FamilyID) REFERENCES Families(ID)
 );
+
+
+
 
 	`
 	_, err = db.Exec(createTablesQuery)

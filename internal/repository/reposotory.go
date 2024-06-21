@@ -25,6 +25,7 @@ type FamilyAuthRepository interface {
 	UpdateFamily(ctx context.Context, family *structs.Family) error
 	DeleteFamily(ctx context.Context, familyID int) error
 	GetFamily(ctx context.Context, familyID int) (*structs.Family, error)
+	ListFamilies(ctx context.Context) ([]*structs.Family, error)
 
 	// Member management
 	CreateMember(ctx context.Context, member *structs.User) error

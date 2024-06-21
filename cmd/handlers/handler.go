@@ -29,8 +29,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	// Auth endpoints
 	auth := router.Group("/auth")
 	{
-		auth.POST("/login", h.Login)       // Login endpoint
-		auth.POST("/register", h.Register) // Register endpoint
+		auth.POST("/login", h.Login) // Login endpoint
+		auth.POST("/register", h.Register)
+		auth.POST("/family", h.AddFamily) // Register endpoint
 	}
 	api := router.Group("/api")
 	// User endpoints
@@ -40,7 +41,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		users.GET("", h.ListUsers)   // List users
 		users.GET("/:id", h.GetUser) // Get user by ID
 	}
-
+	family := api.Group("/family")
+	{
+		family.Use(middleware.JWTMiddleware("your-secret-key"))
+		family.GET("", h.ListFamilies)  // List family
+		family.GET("/:id", h.GetFamily) // family user by ID
+	}
 	// Dish endpoints
 	dishes := api.Group("/dishes")
 	{

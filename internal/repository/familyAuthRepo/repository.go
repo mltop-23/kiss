@@ -17,6 +17,7 @@ type FamilyAuthRepository interface {
 	UpdateFamily(ctx context.Context, family *structs.Family) error
 	DeleteFamily(ctx context.Context, familyID int) error
 	GetFamily(ctx context.Context, familyID int) (*structs.Family, error)
+	ListFamilies(ctx context.Context) ([]*structs.Family, error)
 
 	// Member management
 	CreateMember(ctx context.Context, member *structs.User) error
@@ -39,11 +40,13 @@ func NewFamilyAuthPostgres(db *sql.DB) *FamilyAuthPostgres {
 }
 
 // Family management
-func (r *FamilyAuthPostgres) RegisterFamily(ctx context.Context, family *structs.Family) error {
-	_, err := r.db.ExecContext(ctx, "INSERT INTO families (name) VALUES ($1)", family.ID)
+func (repo *FamilyAuthPostgres) RegisterFamily(ctx context.Context, family *structs.Family) error {
+	query := `INSERT INTO Families (HusbandID, WifeID, Kisses, Debt) VALUES ($1, $2, $3, $4)`
+	_, err := repo.db.ExecContext(ctx, query, family.HusbandID, family.WifeID, family.Kisses, family.Debt)
 	return err
 }
 
+// dont work
 func (r *FamilyAuthPostgres) UpdateFamily(ctx context.Context, family *structs.Family) error {
 	_, err := r.db.ExecContext(ctx, "UPDATE families SET name = $1 WHERE id = $2", family.ID, family.ID)
 	return err
@@ -54,10 +57,42 @@ func (r *FamilyAuthPostgres) DeleteFamily(ctx context.Context, familyID int) err
 	return err
 }
 
-func (r *FamilyAuthPostgres) GetFamily(ctx context.Context, familyID int) (*structs.Family, error) {
+func (repo *FamilyAuthPostgres) GetFamily(ctx context.Context, familyID int) (*structs.Family, error) {
+	query := `SELECT ID, HusbandID, WifeID, Kisses, Debt FROM Families WHERE ID = $1`
+	row := repo.db.QueryRowContext(ctx, query, familyID)
+
 	var family structs.Family
-	err := r.db.QueryRowContext(ctx, "SELECT id, name FROM families WHERE id = $1", familyID).Scan(&family.ID, &family.ID)
-	return &family, err
+	err := row.Scan(&family.ID, &family.HusbandID, &family.WifeID, &family.Kisses, &family.Debt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &family, nil
+}
+
+func (repo *FamilyAuthPostgres) ListFamilies(ctx context.Context) ([]*structs.Family, error) {
+	query := `SELECT ID, HusbandID, WifeID, Kisses, Debt FROM Families`
+	rows, err := repo.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var families []*structs.Family
+	for rows.Next() {
+		var family structs.Family
+		err := rows.Scan(&family.ID, &family.HusbandID, &family.WifeID, &family.Kisses, &family.Debt)
+		if err != nil {
+			return nil, err
+		}
+		families = append(families, &family)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return families, nil
 }
 
 // Member management
@@ -80,7 +115,7 @@ func (r *FamilyAuthPostgres) DeleteMember(ctx context.Context, memberID int) err
 
 func (r *FamilyAuthPostgres) GetMember(ctx context.Context, memberID int) (*structs.User, error) {
 	var member structs.User
-	err := r.db.QueryRowContext(ctx, "SELECT id, username, password, email, first_name, last_name, gender, role FROM users WHERE id = $1", memberID).Scan(
+	err := r.db.QueryRowContext(ctx, "SELECT id,  username, password, email, firstName, lastName, gender, role FROM users WHERE id = $1", memberID).Scan(
 		&member.ID, &member.Username, &member.Password, &member.Email, &member.FirstName, &member.LastName, &member.Gender, &member.Role)
 	return &member, err
 }

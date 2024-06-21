@@ -14,13 +14,14 @@ type AuthInterface interface {
 	UpdateFamily(ctx context.Context, family *structs.Family) error
 	DeleteFamily(ctx context.Context, familyID int) error
 	GetFamily(ctx context.Context, familyID int) (*structs.Family, error)
+	ListFamilies(ctx context.Context) ([]*structs.Family, error)
 
 	// Member management
 	CreateMember(ctx context.Context, member *structs.User) error
 	UpdateMember(ctx context.Context, member *structs.User) error
 	DeleteMember(ctx context.Context, memberID int) error
 	GetMember(ctx context.Context, memberID int) (*structs.User, error)
-
+	ListMembers(ctx context.Context) ([]*structs.User, error)
 	// Authentication and authorization
 	LoginMember(ctx context.Context, email, password string) (string, error)
 	ValidateToken(ctx context.Context, token string) (*structs.User, error)
