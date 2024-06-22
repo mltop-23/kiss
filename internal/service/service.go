@@ -21,10 +21,10 @@ type AuthInterface interface {
 	UpdateMember(ctx context.Context, member *structs.User) error
 	DeleteMember(ctx context.Context, memberID int) error
 	GetMember(ctx context.Context, memberID int) (*structs.User, error)
-	ListMembers(ctx context.Context) ([]*structs.User, error)
+	// ListMembers(ctx context.Context) ([]*structs.User, error)
 	// Authentication and authorization
 	LoginMember(ctx context.Context, email, password string) (string, error)
-	ValidateToken(ctx context.Context, token string) (*structs.User, error)
+	// ValidateToken(ctx context.Context, token string) (*structs.User, error)
 	LogoutMember(ctx context.Context, token string) error
 }
 type DishInterface interface {

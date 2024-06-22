@@ -1,0 +1,42 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  gender: String!
+  role: String!
+}
+
+type Family {
+  id: ID!
+  husbandId: Int!
+  wifeId: Int!
+  kisses: Int!
+  debt: Int!
+}
+
+type Dish {
+  id: ID!
+  name: String!
+  recipe: String!
+  cookingTime: Int!
+  complexity: String!
+  taste: String!
+  kisses: Int!
+}
+
+type Query {
+  listUsers: [User!]!
+  getUser(id: ID!): User
+  listFamilies: [Family!]!
+  getFamily(id: ID!): Family
+  listDishes: [Dish!]!
+  getDish(id: ID!): Dish
+}
+
+type Mutation {
+  addUser(username: String!, email: String!, firstName: String!, lastName: String!, gender: String!, role: String!): User!
+  addFamily(husbandId: Int!, wifeId: Int!, kisses: Int!, debt: Int!): Family!
+  addDish(name: String!, recipe: String!, cookingTime: Int!, complexity: String!, taste: String!, kisses: Int!): Dish!
+}

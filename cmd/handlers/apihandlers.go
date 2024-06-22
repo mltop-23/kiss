@@ -2,11 +2,15 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"kissandeat/internal/structs"
+	"kissandeat/middleware"
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +35,7 @@ func (h *Handler) Register(c *gin.Context) {
 }
 
 func (h *Handler) Login(c *gin.Context) {
+	log.Println("start login")
 	var input struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -41,17 +46,81 @@ func (h *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := h.services.AuthInterface.LoginMember(c.Request.Context(), input.Email, input.Password)
+	userID, err := h.services.AuthInterface.LoginMember(c.Request.Context(), input.Email, input.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
+	id, err := strconv.Atoi(userID)
+	accessToken, err := middleware.CreateToken(h.secretKey, id, time.Minute*1) // 15 минут для access токена
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create access token"})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	refreshToken, err := middleware.CreateRefreshToken(h.refreshSecretKey, id, time.Hour*24*7) // 7 дней для refresh токена
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create refresh token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
+	})
 }
 
+func (h *Handler) RefreshToken(c *gin.Context) {
+	var input struct {
+		RefreshToken string `json:"refresh_token" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	refreshToken, err := jwt.ParseWithClaims(input.RefreshToken, &structs.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return []byte(h.refreshSecretKey), nil
+	})
+
+	if err != nil || !refreshToken.Valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid refresh token"})
+		return
+	}
+
+	if claims, ok := refreshToken.Claims.(*structs.Claims); ok && refreshToken.Valid {
+		if time.Now().Unix() > claims.ExpiresAt {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "refresh token expired"})
+			return
+		}
+
+		newAccessToken, err := middleware.CreateToken(h.secretKey, claims.UserID, time.Minute*15) // 15 минут для access токена
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create new access token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"access_token": newAccessToken})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid refresh token claims"})
+	}
+}
+
+// костыль
 func (h *Handler) ListUsers(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "List users stub"})
+	ctx := context.Background()
+	users, err := h.services.AuthInterface.GetFamily(ctx, 5)
+	if err != nil {
+		log.Printf("Error listing users: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list users"})
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
 }
 
 func (h *Handler) GetUser(c *gin.Context) {
@@ -213,3 +282,46 @@ func (h *Handler) GetDish(c *gin.Context) {
 
 	c.JSON(http.StatusOK, dish)
 }
+
+// func RefreshTokenHandler(secretKey string, refreshSecret string) gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		var request struct {
+// 			RefreshToken string `json:"refresh_token" binding:"required"`
+// 		}
+
+// 		if err := c.ShouldBindJSON(&request); err != nil {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 			return
+// 		}
+
+// 		refreshToken, err := jwt.ParseWithClaims(request.RefreshToken, &structs.Claims{}, func(token *jwt.Token) (interface{}, error) {
+// 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+// 				return nil, errors.New("unexpected signing method")
+// 			}
+// 			return []byte(refreshSecret), nil
+// 		})
+
+// 		if err != nil || !refreshToken.Valid {
+// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid refresh token"})
+// 			return
+// 		}
+
+// 		if claims, ok := refreshToken.Claims.(*structs.Claims); ok && refreshToken.Valid {
+// 			if time.Now().Unix() > claims.ExpiresAt {
+// 				c.JSON(http.StatusUnauthorized, gin.H{"error": "refresh token expired"})
+// 				return
+// 			}
+
+// 			// Создаем новый access токен
+// 			newAccessToken, err := middleware.CreateToken(secretKey, claims.UserID, time.Minute*15) // 15 минут для access токена
+// 			if err != nil {
+// 				c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create new access token"})
+// 				return
+// 			}
+
+// 			c.JSON(http.StatusOK, gin.H{"access_token": newAccessToken})
+// 		} else {
+// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid refresh token claims"})
+// 		}
+// 	}
+// }

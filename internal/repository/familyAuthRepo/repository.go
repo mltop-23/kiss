@@ -27,7 +27,7 @@ type FamilyAuthRepository interface {
 
 	// Authentication and authorization
 	LoginMember(ctx context.Context, email, password string) (string, error)
-	ValidateToken(ctx context.Context, token string) (*structs.User, error)
+	// ValidateToken(ctx context.Context, token string) (*structs.User, error)
 	LogoutMember(ctx context.Context, token string) error
 }
 
@@ -141,22 +141,6 @@ func (r *FamilyAuthPostgres) LoginMember(ctx context.Context, email, password st
 	return token, nil
 }
 
-func (r *FamilyAuthPostgres) ValidateToken(ctx context.Context, token string) (*structs.User, error) {
-	claims, err := ParseToken(token)
-	if err != nil {
-		return nil, err
-	}
-
-	var user structs.User
-	err = r.db.QueryRowContext(ctx, "SELECT id, username, email, first_name, last_name, gender, role FROM users WHERE id = $1", claims.UserID).Scan(
-		&user.ID, &user.Username, &user.Email, &user.FirstName, &user.LastName, &user.Gender, &user.Role)
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
 func (r *FamilyAuthPostgres) LogoutMember(ctx context.Context, token string) error {
 	// В данном примере logout не требует действий на сервере,
 	// поскольку JWT токен является самодостаточным.
@@ -170,17 +154,5 @@ func GenerateToken(userID int) (string, error) {
 		"user_id": userID,
 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
-	return token.SignedString([]byte("your-secret-key"))
-}
-
-func ParseToken(tokenStr string) (*structs.Claims, error) {
-	token, err := jwt.ParseWithClaims(tokenStr, &structs.Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("your-secret-key"), nil
-	})
-
-	if claims, ok := token.Claims.(*structs.Claims); ok && token.Valid {
-		return claims, nil
-	} else {
-		return nil, err
-	}
+	return token.SignedString([]byte("your_secret_key"))
 }

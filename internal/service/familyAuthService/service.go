@@ -35,9 +35,10 @@ func (s *AuthService) GetFamily(ctx context.Context, familyID int) (*structs.Fam
 func (s *AuthService) ListFamilies(ctx context.Context) ([]*structs.Family, error) {
 	return s.repo.ListFamilies(ctx)
 }
-func (s *AuthService) ListMembers(ctx context.Context) ([]*structs.User, error) {
-	return s.repo.ListMembers(ctx)
-}
+
+// func (s *AuthService) ListMembers(ctx context.Context) ([]*structs.User, error) {
+// 	return s.repo.ListMembers(ctx)
+// }
 
 // Member management
 func (s *AuthService) CreateMember(ctx context.Context, member *structs.User) error {
@@ -73,9 +74,9 @@ func (s *AuthService) LoginMember(ctx context.Context, email, password string) (
 	return s.repo.LoginMember(ctx, email, password)
 }
 
-func (s *AuthService) ValidateToken(ctx context.Context, token string) (*structs.User, error) {
-	return s.repo.ValidateToken(ctx, token)
-}
+// func (s *AuthService) ValidateToken(ctx context.Context, token string) (*structs.User, error) {
+// 	return s.repo.ValidateToken(ctx, token)
+// }
 
 func (s *AuthService) LogoutMember(ctx context.Context, token string) error {
 	return s.repo.LogoutMember(ctx, token)

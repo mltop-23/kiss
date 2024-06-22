@@ -24,6 +24,8 @@ func initConfig() error {
 	return viper.ReadInConfig()
 }
 func main() {
+	secretKey := "your_secret_key"
+	refreshSecret := "your_refresh_secret_key"
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 
 	if err := initConfig(); err != nil {
@@ -48,7 +50,7 @@ func main() {
 
 	repos, err := repository.NewRepository(db)
 	services := service.NewService(repos)
-	handlers := handlers.NewHandler(services)
+	handlers := handlers.NewHandler(secretKey, refreshSecret, services)
 	srv := new(api.Server)
 	go func() {
 		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {

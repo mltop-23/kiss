@@ -12,13 +12,6 @@ import (
 	"strings"
 )
 
-// type SqlRepository interface {
-// 	// CreateUser(ctx context.Context, user *structs.User) (int64, error)
-// 	// GetUser(id int64) (*structs.User, error)
-// 	// UpdateUser(ctx context.Context, user *structs.User) error
-// 	// DeleteUser(ctx context.Context, id int64) error
-// }
-
 type FamilyAuthRepository interface {
 	// Family management
 	RegisterFamily(ctx context.Context, family *structs.Family) error
@@ -35,7 +28,7 @@ type FamilyAuthRepository interface {
 
 	// Authentication and authorization
 	LoginMember(ctx context.Context, email, password string) (string, error)
-	ValidateToken(ctx context.Context, token string) (*structs.User, error)
+	// ValidateToken(ctx context.Context, token string) (*structs.User, error)
 	LogoutMember(ctx context.Context, token string) error
 }
 
