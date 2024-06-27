@@ -19,6 +19,7 @@ const (
 
 func main() {
 	cfg := config.MustLoad()
+	slog.Info("hello", "count", 3)
 
 	log := setupLogger(cfg.Env)
 
