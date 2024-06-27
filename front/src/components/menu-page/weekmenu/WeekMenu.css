@@ -1,0 +1,6 @@
+/* src/components/weekmenu/WeekMenu.css */
+.week-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }

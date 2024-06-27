@@ -1,0 +1,133 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1px 10px; /* Уменьшены вертикальные отступы */
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+  backdrop-filter: blur(15px); /* Эффект размытия */
+  font-size: 1.2vw;
+  margin: 0;
+  border: 1px solid #c6c6c6;
+
+
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  height: 6vw; /* Уменьшена высота логотипа */
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  margin-left: 10px; /* Уменьшены отступы слева */
+}
+
+.nav-links a {
+  text-decoration: none;
+  margin: 0 10px; /* Уменьшены горизонтальные отступы */
+  font-weight: normal;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  transform: scale(1.1); /* Увеличение на 10% */
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  color: #333;
+  margin: 0; /* Убедитесь, что нет дополнительных отступов */
+  font-size: 2vw;
+}
+
+.title a:hover {
+transform: scale(1.05);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  margin-left: 10px;
+  padding: 5px 10px; /* Уменьшены отступы внутри кнопок */
+  border: 1px solid #f1f2ed;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.button:hover {
+  background-color: #f1eee7;
+  color: #000000;
+  border-color: #f1eee7;
+  transform: scale(1.1);
+}
+
+.burger-icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 60px;
+  right: 0; /* Мобильное меню будет справа */
+  background-color: rgba(248, 248, 248, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+
+}
+
+@media (max-width: 1000px) {
+  .nav-links {
+    display: none;
+  }
+  .title {
+    left: 60%; /* Сдвигаем заголовок немного вправо на мобильных устройствах */
+  }
+}
+
+/* @media (min-width: 1400px) {
+  .header {
+    font-size: 1.2vw;
+  }
+
+  .logo-image {
+    height: 6vw; 
+  }
+
+  .title {
+    font-size: 2vw;
+  }
+} */
+
+
+
+
+
+
+

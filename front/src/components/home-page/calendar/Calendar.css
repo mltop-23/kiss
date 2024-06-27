@@ -1,0 +1,42 @@
+/* src/components/Calendar.css */
+.calendar {
+  background-color: #f1f2ed;
+  border-radius: 10px;
+  border: 1px solid #c6c6c6;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  padding: 20px;
+  flex: 2; /* 2/4 пространства */
+  text-align: center;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.calendar-day {
+  background-color: #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  border: 1px solid #979595;
+}
+
+.calendar-day:hover {
+  background-color: #ddd;
+}
+
+.calendar-day.selected {
+  background-color: #a3a1a1;
+  color: #fff;
+}

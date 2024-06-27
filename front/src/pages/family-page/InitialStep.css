@@ -1,0 +1,88 @@
+/* src/components/InitialStep.css */
+
+
+.step-header {
+  margin-bottom: 20px;
+}
+
+.step-meals {
+  display: flex;
+  gap: 10px;
+  flex-direction: row; 
+}
+
+.step-meal {
+  flex: 1; 
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+  gap: 10px;
+  position: relative;
+
+  background-color: #f1f2ed;
+  border-radius: 10px;
+  border: 1px solid #c6c6c6;
+}
+
+.step-meal-header {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: -20px; 
+  left: 0;
+}
+
+.step-meal-image {
+  max-width: 100px; 
+  max-height: 100px; 
+  display: block;
+  margin-right: 10px; 
+}
+
+.step-meal-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-no-meal {
+  flex: 1; 
+  text-align: center;
+  padding: 20px;
+}
+
+.step-button{
+  margin-top: 0;
+  margin-left: 0;
+}
+
+
+
+
+
+
+
+
+/* Для всех кнопок на всех шагах */
+.buttons-step {
+  display: flex;
+  justify-content: space-between; /* Пространство между кнопками */
+  gap: 10px;
+  width: 100%; /* Ширина контейнера для кнопок */
+  margin-top: 10px;
+}
+
+.buttons-step  button {
+  width: 100%; /* Растягиваем кнопки по всему блоку */
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buttons-step button:hover {
+  background-color: #b1afaf;
+}

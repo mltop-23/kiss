@@ -1,0 +1,84 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 53.7vw;
+  background-image: url('fonAuth.jpg'); /* Path to your background image */
+  background-size: cover;
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+}
+
+.auth-form {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 50vh;
+  margin-top: 2.5vw;
+}
+
+.auth-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.gender-selection {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.gender-selection label {
+  font-weight: normal;
+}
+
+.auth-button, .generate-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #9e0021;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.auth-button:hover, .generate-button:hover {
+  background-color: #9e0021;
+  transform: scale(1.01);
+}
+
+.auth-toggle {
+  text-align: center;
+}
+
+.auth-link {
+  color: #9e0021;
+  cursor: pointer;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}

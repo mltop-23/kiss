@@ -1,0 +1,70 @@
+/* src/pages/recipespage/RecipesPage.css */
+
+.recipes-page {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recipes-page h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.recipes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%; /* Добавлено, чтобы занять всю ширину */
+  gap: 20px;
+}
+
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s;
+  width: calc(33% - 40px);
+   /* Три карточки в строке с учетом отступов */
+  
+   background-color: #f1f2ed;
+   border-radius: 10px;
+   border: 1px solid #c6c6c6;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05);
+}
+
+.recipe-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px 10px 0 0;
+}
+
+.recipe-card h2 {
+  margin: 20px 0 10px;
+  font-size: 1.5rem;
+}
+
+.recipe-card p {
+  margin: 0 20px 20px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 1200px) {
+  .recipe-card {
+    width: calc(50% - 40px); /* Две карточки в строке для экранов до 1200px */
+  }
+}
+
+@media (max-width: 768px) {
+  .recipe-card {
+    width: calc(100% - 40px); /* Одна карточка в строке для экранов до 768px */
+  }
+}
