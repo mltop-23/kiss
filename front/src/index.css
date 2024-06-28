@@ -1,0 +1,97 @@
+:root {
+  --primary-color: #e4ded1; /* Основной цвет */
+  --primary-color-border: #b8b3a6; /* Основной цвет рамки */
+  --primary-border-radius: 20px; /* Основной цвет */
+  --primary-box-shadow: 0 2px 4px rgba(124, 124, 124, 0.1); /* Основной цвет */
+}
+
+/* Основные стили для body */
+@import url('./assets/fonts/fonts.css');
+
+  body {
+    margin: 0;
+    font-family: 'Trajan Pro', sans-serif;
+    background-color: #f1f2ed;
+  }
+  
+  h1, h2,h3, h4, h5, h6, a, button {
+    color: #121212;
+    text-decoration: none; /* Убираем подчеркивание для ссылки */
+  }
+
+
+
+
+
+
+/* все фоны */
+
+body {
+  background-color: var(--primary-color);
+}
+
+.header {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+} 
+
+/* все кнопки */
+.button {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+
+/* главный контейнер */
+.container {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+
+/* мама и папа на главной странице */
+.meal-card { 
+  background: radial-gradient(circle, #a4afa7 0%, #a4afa7 30%, #e4ded1 100%);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+
+/* календарь на главной */
+.calendar {
+  background: radial-gradient(circle, #a4afa7 0%, #a4afa7 30%, #e4ded1 100%);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+
+.calendar-day {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+
+:root {
+  --primary-gallery-item-color: #c0baae; /* галерея на главной основной цвет */
+}
+
+/* галерея на главной */
+.gallery-item {
+  background: radial-gradient(circle, var(--primary-gallery-item-color) 0%, var(--primary-gallery-item-color) 100%, var(--primary-color) 100%);
+  border: 1px solid var(--primary-color-border);
+  border-radius: var(--primary-border-radius);
+  box-shadow: var(--primary-box-shadow);
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,62 @@
+/* src/components/Gallery.css */
+.gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Уменьшено расстояние между элементами */
+    padding: 10px; /* Уменьшены отступы контейнера галереи */
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .gallery-item {
+    flex: 1 1 calc(100% / 7 - 20px); /* Растягиваем карточки, чтобы они занимали 1/7 доступного пространства */
+    text-align: center;
+    background-color: #f1f2ed;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px; /* Уменьшены внутренние отступы */
+    margin: 5px; /* Уменьшены внешние отступы */
+    transition: transform 0.3s ease;
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+    border: 1px solid #c6c6c6;
+  }
+  
+  .gallery-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .gallery-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .gallery h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .gallery p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  @media (max-width: 1300px) {
+    .gallery-item {
+      flex: 1 1 calc(100% / 3 - 20px); /* На меньших экранах по 3 карточки в ряду */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .gallery-item {
+      flex: 1 1 calc(100% / 2 - 20px); /* На еще меньших экранах по 2 карточки в ряду */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .gallery-item {
+      flex: 1 1 100%; /* На мобильных экранах по 1 карточке в ряду */
+    }
+  }
+  

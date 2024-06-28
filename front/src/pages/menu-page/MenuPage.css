@@ -1,0 +1,10 @@
+.menu-page {
+  padding: 20px;
+  text-align: center; /* Центрирование текста */
+  background-color: #f1f2ed;
+}
+
+.menu-page h1 {
+  font-size: 2rem;
+  text-align: center; /* Центрирование заголовка */
+}

@@ -1,0 +1,24 @@
+.cooks-step2 {
+    display: flex;
+    justify-content: center; /* Выравнивание по центру */
+    align-items: center; /* Вертикальное выравнивание */
+    gap: 20px; /* Пространство между изображениями */
+  }
+  
+  .cook-container-step2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row; /* Для размещения элементов вертикально */
+  }
+  
+  .cook-step2 {
+    max-width: 200px; /* Максимальная ширина изображений */
+    border-radius: 50%; /* Округляем изображение */
+    cursor: pointer;
+  }
+  
+  .cook-step2.selected-step2 {
+    border: 2px solid #555555;
+    background-color: #eeeeee;
+  }

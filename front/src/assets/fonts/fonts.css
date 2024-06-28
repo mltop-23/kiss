@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Trajan Pro';
+    src: url('./Trajan Pro 3 Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'Trajan Pro', sans-serif;
+  }
+  

@@ -1,0 +1,71 @@
+/* src/components/daymenu/DayMenu.css */
+.day-menu {
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f1f2ed;
+    border: 1px solid #c6c6c6;
+  }
+  
+  .day-menu h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .meal-columns {
+    display: flex;
+    justify-content: space-around;
+    
+  }
+  
+  .meal-time {
+    flex: 1;
+    margin: 0 10px;
+    background-color: #f1f2ed;
+    border: 1px solid #c6c6c6;
+    text-align: left; /* Выровнять текст слева */
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .meal-time h3 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .meals {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .meal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .meal img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .meal-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .meal-info h4 {
+    margin: 0;
+  }
+  
+  .meal-info p {
+    margin: 0;
+    color: #666;
+  }
+  
